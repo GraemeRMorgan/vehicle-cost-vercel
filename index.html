@@ -1,96 +1,165 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script defer src="/_vercel/insights/script.js"></script>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <title>Vehicle Cost</title>
+    <!-- Bootstrap -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
     />
-    <title>Vercel HTML Starter</title>
-    <meta
-      name="description"
-      content="High-performance HTML based website template."
+    <!-- jQueryUI styling -->
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
+    <!-- Tooltip styling -->
+    <link rel="stylesheet" href="css/d3-tip.css" />
+    <!-- Custom styling -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Open Sans Font -->
+    <!-- Open Sans font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Work Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
     />
   </head>
   <body>
-    <h1>Vercel HTML Starter</h1>
-    <p>
-      This template is a simple, but powerful single
-      <code>index.html</code> file deployed to
-      <a href="https://vercel.com">Vercel</a>. When your site is deployed, all
-      static assets (like HTML, JavaScript, CSS, images, and more) are deployed
-      globally to every
-      <a href="https://vercel.com/docs/concepts/edge-network/overview"
-        >Vercel Edge Network</a
-      >
-      region.
-    </p>
-    <h2>Simple, privacy-friendly analytics</h2>
-    <p>
-      Want to understand your visitor traffic? Vercel Analytics gives you
-      first-party, privacy-friendly traffic analytics for your HTML site. This
-      template is already configured using the following script:
-    </p>
-    <pre><code>&lt;script defer src="/_vercel/insights/script.js"&gt;&lt;/script&gt;</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/analytics">Vercel Analytics</a>.
-    </p>
-    <h2>Integrated with git</h2>
-    <p>
-      Deploying updates to your site is as simple as
-      <code>git push</code> thanks to Vercel's advanced
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-      Support for GitHub, GitLab, Bitbucket is zero-configuration, and with the
-      flexible Vercel CLI and API, you can integrate with any tool possible.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-    </p>
-    <h2>Fast <code>gzip</code> compression</h2>
-    <p>
-      To help ensure the smallest possible file sizes for your static assets,
-      the Vercel Edge Network compresses files by default using
-      <code>gzip</code>. You can also optionally use
-      <code>brotli</code> compressesion if you prefer.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/edge-network/compression"
-        >compression</a
-      >.
-    </p>
-    <h2>Advanced routing configuration</h2>
-    <p>
-      Vercel gives you a variety of ways to configure the routing of your
-      website. For example, adding redirects, rewrites, or headers to your page.
-      While you can use <code>vercel.json</code> to define these through JSON,
-      you can also express your routing configuration as code using
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-    <p>
-      Middleware runs before the
-      <a href="https://vercel.com/docs/concepts/edge-network/caching"
-        >Vercel Edge Network Cache</a
-      >, so you can configure routing exactly as your application needs. For
-      example, this template uses <code>middleware.js</code> defined in the root
-      of the repository to add additional security headers to the site:
-    </p>
-    <pre><code>referrer-policy: origin-when-cross-origin
-strict-transport-security: max-age=31536000; includeSubDomains; preload
-x-content-type-options: nosniff
-x-dns-prefetch-control: on
-x-frame-options: DENY</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
+    <nav class="nav">
+      <div class="title">
+        <!-- <a class="navbar-brand" href="#"
+          ><img id="logo" src="img/logo.png"
+        /></a> -->
+        <h1>Vehicle Cost and Compare 2024</h1>
+      </div>
+      <div class="buttonNav"><button type="button" class="btn btn-info">Info</button></div>
+    </nav>
+
+    <!-- Bootstrap grid setup -->
+    <div class="wrapper">
+      <div class="col1">
+        <!-- <div class="playReset">
+          <button id="play-button" class="btn btn-primary">Play</button>
+          <button id="reset-button" class="btn btn-primary">Reset</button>
+        </div> -->
+        <div class="dropDown">
+          <div>Vehicle Type</div>
+          <select id="type-select" class="form-control">
+            <option selected value="all">All</option>
+            <option value="gas">Gas</option>
+            <option value="hybrid">Hybrid</option>
+            <option value="phev">PHEV</option>
+            <option value="ev">EV</option>
+          </select>
+        </div>
+
+        <div class="slider">
+          <div id="slider-div-year">
+            <label>Years of Ownership: <span id="year">1</span></label>
+            <div id="date-slider"></div>
+          </div>
+        </div>
+
+        <div class="slider">
+          <div id="slider-div-mileage">
+            <label>Daily Mileage: <span id="km">60</span><span>km</span></label>
+            <div id="mileage-slider"></div>
+          </div>
+        </div>
+
+        <div class="slider">
+          <div id="slider-div-gas">
+            <label
+              >Gas Price: <span>$</span><span id="gas">1.80</span
+              ><span> per litre</span></label
+            >
+            <div id="gas-slider"></div>
+          </div>
+        </div>
+
+        <div class="slider">
+          <div id="slider-div-electricity">
+            <label
+              >Electricty Price: <span id="electricity">12</span
+              ><span> cents kw/h</span></label
+            >
+            <div id="electricity-slider"></div>
+          </div>
+        </div>
+
+        <div class="slider">
+          <div id="slider-div-insurance">
+            <label
+              >Annual Insurance: <span>$</span
+              ><span id="insurance">1800</span></label
+            >
+            <div id="insurance-slider"></div>
+          </div>
+        </div>
+
+        <div class="slider">
+          <div id="slider-div-rebate">
+            <label
+              >Provincial Rebate: <span>$</span
+              ><span id="rebate">0</span></label
+            >
+            <div id="rebate-slider"></div>
+          </div>
+        </div>
+
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="federal-check"
+          />
+          <label class="form-check-label" for="flexCheckDefault">
+            Federal Rebate
+          </label>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="col-md-10">
+          <div id="chart-area"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- External JS libraries -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.min.js"
+      integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+      integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+      crossorigin="anonymous"
+    ></script>
+    <script src="js/d3-tip.js"></script>
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
   </body>
 </html>

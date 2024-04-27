@@ -1,0 +1,97 @@
+body {
+  font-family: "Work Sans", sans-serif;	
+  font-size: 17px;
+  letter-spacing: -0.05rem;
+}
+
+h1 {
+  font-weight: 600;
+  font-family: "Work Sans", sans-serif;
+  letter-spacing: -0.2rem;
+}
+
+#chart-area svg {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  font-size: 1.1rem;
+}
+
+#logo {
+  height: 50px;
+}
+
+.navbar-brand {
+  height: 60px;
+  padding: 5px 0px;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 24px 48px;
+  background: linear-gradient(to top, white, bisque);
+  width: 100%;
+}
+
+.buttonNav{
+  align-items: center;
+}
+
+#slider-div-year,
+#slider-div-mileage,
+#slider-div-gas,
+#slider-div-electricity,
+#slider-div-rebate,
+#slider-div-insurance {
+  width: 300px;
+  margin-left: 10px;
+}
+
+#reset-button,
+#play-button {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+#continent-select {
+  width: 150px;
+  float: right;
+  margin-top: 5px;
+}
+
+.y.axis,
+.x.axis {
+  font-size: 1rem;
+}
+
+.wrapper {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr 3fr;
+  padding: 48px 64px;
+}
+
+.col1 {
+  /* background-color: bisque; */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.playReset,
+.slider {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+}
+
+.slider {
+  margin-bottom: 24px;
+}
+
+.dropDown {
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+}
