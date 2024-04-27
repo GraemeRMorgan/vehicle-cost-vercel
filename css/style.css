@@ -18,8 +18,7 @@ h1 {
 }
 @media(max-width: 1000px){
   #chart-area {
-    margin-left: -300px;
-    margin-top: 48px;
+    display: none;
   }
 }
 
@@ -42,6 +41,7 @@ h1 {
 
 .buttonNav{
   align-items: center;
+  display: none;
 }
 
 #slider-div-year,
@@ -80,7 +80,21 @@ h1 {
 }
 @media (max-width: 1000px){
   .wrapper {
-    flex-direction: column;
+    display: none;
+  }
+}
+
+.warningWrapper {
+  display: flex;
+  /* justify-content: center; */
+  flex-direction: row;
+  gap: 12px;
+  padding: 48px 128px;
+  display: none;
+}
+@media (max-width: 1000px){
+  .warningWrapper{
+    display: block;
   }
 }
 
