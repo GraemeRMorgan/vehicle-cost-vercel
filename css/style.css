@@ -16,6 +16,12 @@ h1 {
   display: block;
   font-size: 1.1rem;
 }
+@media(max-width: 1000px){
+  #chart-area {
+    margin-left: -300px;
+    margin-top: 48px;
+  }
+}
 
 #logo {
   height: 50px;
@@ -66,18 +72,31 @@ h1 {
 }
 
 .wrapper {
-  display: grid;
+  display: flex;
+  /* justify-content: center; */
+  flex-direction: row;
   gap: 12px;
-  grid-template-columns: 1fr 3fr;
-  padding: 48px 64px;
+  padding: 48px 128px;
 }
+@media (max-width: 1000px){
+  .wrapper {
+    flex-direction: column;
+  }
+}
+
 
 .col1 {
   /* background-color: bisque; */
   display: flex;
+  /* display: none; */
   flex-direction: column;
   gap: 12px;
 }
+
+.col2 {
+  margin-right: -320px;
+}
+
 
 .playReset,
 .slider {
