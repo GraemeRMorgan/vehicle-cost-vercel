@@ -113,8 +113,8 @@ const tip = d3
   .tip()
   .attr("class", "d3-tip")
   .html((d) => {
-    let text = `<strong>Vehicle: </strong> ${d.model}<br />`;
-    text += `<strong>Total Cost: </strong> $${d3.format(",.2f")(d.total_cost)}<br />`;
+    let text = `Vehicle: ${d.model}<br />`;
+    text += `Total Cost: $${d3.format(",.2f")(d.total_cost)}<br />`;
   
     return text;
   });
