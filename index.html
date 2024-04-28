@@ -46,9 +46,7 @@
     </nav>
 
     <!-- Bootstrap grid setup -->
-    <div class="warningWrapper">
-      <h2>This application is only available on desktop.</h2>
-    </div>
+    
     <div class="wrapper">
       <div class="col1">
         <!-- <div class="playReset">
@@ -83,27 +81,26 @@
         <div class="slider">
           <div id="slider-div-gas">
             <label
-              >Gas Price: <span>$</span><span id="gas">1.80</span
+              >Gas: <span>$</span><span id="gas">1.80</span
               ><span> per litre</span></label
             >
             <div id="gas-slider"></div>
           </div>
         </div>
 
+
         <div class="slider">
           <div id="slider-div-electricity">
-            <label
-              >Electricty Price: <span id="electricity">12</span
-              ><span> cents kw/h</span></label
-            >
+            <label>Electricty: <span id="electricity">12</span><span> cents kw/h</span></label>
             <div id="electricity-slider"></div>
           </div>
         </div>
 
+
         <div class="slider">
           <div id="slider-div-insurance">
             <label
-              >Annual Insurance: <span>$</span
+              >Insurance: <span>$</span
               ><span id="insurance">1800</span></label
             >
             <div id="insurance-slider"></div>
@@ -113,14 +110,14 @@
         <div class="slider">
           <div id="slider-div-rebate">
             <label
-              >Provincial Rebate: <span>$</span
+              >Rebates: <span>$</span
               ><span id="rebate">0</span></label
             >
             <div id="rebate-slider"></div>
           </div>
         </div>
 
-        <div class="form-check">
+        <!-- <div class="form-check">
           <input
             class="form-check-input"
             type="checkbox"
@@ -130,12 +127,11 @@
           <label class="form-check-label" for="flexCheckDefault">
             Federal Rebate
           </label>
-        </div>
+        </div> -->
       </div>
       <div class="col2">
-        <div class="col-md-10">
           <div id="chart-area"></div>
-        </div>
+       
       </div>
     </div>
 
@@ -161,6 +157,8 @@
       integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+
     <script src="js/d3-tip.js"></script>
     <!-- Custom JS -->
     <script src="js/main.js"></script>

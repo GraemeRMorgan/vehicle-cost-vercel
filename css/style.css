@@ -1,5 +1,5 @@
 body {
-  font-family: "Work Sans", sans-serif;	
+  font-family: "Work Sans", sans-serif;
   font-size: 17px;
   letter-spacing: -0.05rem;
 }
@@ -11,16 +11,12 @@ h1 {
 }
 
 #chart-area svg {
-  margin-left: auto;
+  /* margin-left: auto; */
   margin-right: auto;
   display: block;
   font-size: 1.1rem;
 }
-@media(max-width: 1000px){
-  #chart-area {
-    display: none;
-  }
-}
+
 
 #logo {
   height: 50px;
@@ -39,7 +35,7 @@ h1 {
   width: 100%;
 }
 
-.buttonNav{
+.buttonNav {
   align-items: center;
   display: none;
 }
@@ -73,42 +69,51 @@ h1 {
 
 .wrapper {
   display: flex;
-  /* justify-content: center; */
+  justify-content: center;
   flex-direction: row;
+  width: 100%;
   gap: 12px;
   padding: 48px 128px;
 }
-@media (max-width: 1000px){
-  .wrapper {
-    display: none;
-  }
-}
-
-.warningWrapper {
-  display: flex;
-  /* justify-content: center; */
-  flex-direction: row;
-  gap: 12px;
-  padding: 48px 128px;
-  display: none;
-}
-@media (max-width: 1000px){
-  .warningWrapper{
-    display: block;
-  }
-}
-
 
 .col1 {
-  /* background-color: bisque; */
   display: flex;
-  /* display: none; */
+  flex: 1;
   flex-direction: column;
   gap: 12px;
 }
 
-.col2 {
-  margin-right: -320px;
+
+.col2 {}
+
+@media(max-width: 1168px) {
+  .wrapper {
+    flex-direction: column;
+    padding: 48px 24px;
+    font-size: 1.4rem;
+  }
+
+  .col1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  #slider-div-year,
+  #slider-div-mileage,
+  #slider-div-gas,
+  #slider-div-electricity,
+  #slider-div-rebate,
+  #slider-div-insurance {
+    width: 200px;
+    margin-left: 10px;
+  }
+
+  .dropDown {
+    grid-column: span 3;
+  }
+
+
+
 }
 
 
@@ -125,6 +130,7 @@ h1 {
 
 .dropDown {
   display: flex;
-  width: 50%;
+  width: 300px;
+  /* display: none; */
   flex-direction: column;
 }

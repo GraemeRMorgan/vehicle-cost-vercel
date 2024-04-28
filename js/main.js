@@ -1,6 +1,8 @@
 const MARGIN = { LEFT: 120, RIGHT: 10, TOP: 10, BOTTOM: 100 };
-const WIDTH = 800 - MARGIN.LEFT - MARGIN.RIGHT;
+const WIDTH = 900 - MARGIN.LEFT - MARGIN.RIGHT;
 const HEIGHT = 620 - MARGIN.TOP - MARGIN.BOTTOM;
+
+
 
 // Flag for jumping between data on Y axis
 let flag = true;
@@ -85,7 +87,7 @@ function updatedPurchasePrice(vehicles) {
     if (d.type === "ev" || d.type === "phev") {
       if (federalRebateFlag) {
         return x(d.purchase_price - (provincialRebate + federalRebate));
-      } 
+      }
       return x(d.purchase_price - provincialRebate);
     } else {
       return x(d.purchase_price);
@@ -102,6 +104,8 @@ const svg = d3
   .append("g")
   .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
 
+
+
 const g = svg
   .append("g")
   .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
@@ -115,7 +119,7 @@ const tip = d3
   .html((d) => {
     let text = `Vehicle: ${d.model}<br />`;
     text += `Total Cost: $${d3.format(",.2f")(d.total_cost)}<br />`;
-  
+
     return text;
   });
 
@@ -141,7 +145,7 @@ const yAxisGroup = g
 const radiusScale = d3
   .scaleLinear()
   .domain([34720, 78400]) // Range of cost values
-  .range([3,13]); // Range of radius values
+  .range([3, 13]); // Range of radius values
 
 // Add labels
 svg
@@ -204,7 +208,7 @@ d3.json("data/vehicleCost.json").then((data) => {
 
   const legend = g
     .append("g")
-    .attr("transform", `translate(${WIDTH - 680}, ${HEIGHT - 480})`);
+    .attr("transform", `translate(${WIDTH - 780}, ${HEIGHT - 480})`);
 
   vehicleTypes.forEach((vehicle, i) => {
     const legendeRow = legend
@@ -270,7 +274,7 @@ $("#date-slider").slider({
   },
 });
 
-// Mileage Slider
+// Mileage Slider - jQuery
 $("#mileage-slider").slider({
   min: 10,
   max: 200,
@@ -281,6 +285,7 @@ $("#mileage-slider").slider({
     update(vehicles, time, mileage, annualMileage);
   },
 });
+
 
 // Gas Price
 $("#gas-slider").slider({
@@ -311,7 +316,7 @@ $("#electricity-slider").slider({
 // Provincial Rebate
 $("#rebate-slider").slider({
   min: 0,
-  max: 8000,
+  max: 15000,
   step: 500,
   value: 0,
   slide: (event, ui) => {
@@ -518,4 +523,5 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
   $("#rebate-slider").slider("value", Number(provincialRebate));
   $("#insurance")[0].innerHTML = String(insurance);
   $("#insurance-slider").slider("value", Number(insurance));
+
 }
