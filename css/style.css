@@ -31,7 +31,7 @@ h1 {
   display: flex;
   justify-content: space-evenly;
   padding: 24px 48px;
-  background: linear-gradient(to top, white, bisque);
+  background-color: tomato;
   width: 100%;
 }
 
