@@ -15,7 +15,7 @@ h1 {
   margin-right: auto;
   
   display: block;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
 }
 
 
@@ -90,6 +90,12 @@ h1 {
 }
 
 @media(max-width: 1168px) {
+
+  body {
+    font-family: "Work Sans", sans-serif;
+    font-size: 36px;
+    letter-spacing: -0.05rem;
+  }
   .wrapper {
     flex-direction: column;
     padding: 48px 24px;
@@ -97,8 +103,15 @@ h1 {
   }
 
   .col1 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    font-size: 2rem;
+    display: flex;
+  }
+  .col2{
+    font-size: 24px;
+  }
+
+  #chart-area {
+    font-size: 24px;
   }
 
   #slider-div-year,
@@ -107,8 +120,12 @@ h1 {
   #slider-div-electricity,
   #slider-div-rebate,
   #slider-div-insurance {
-    width: 200px;
+    width: 100%;
     margin-left: 10px;
+  }
+
+  .form-control{
+    font-size: 2rem;
   }
 
   .dropDown {

@@ -1,8 +1,14 @@
-const MARGIN = { LEFT: 120, RIGHT: 10, TOP: 10, BOTTOM: 100 };
+const MARGIN = { LEFT: 100, RIGHT: 10, TOP: 10, BOTTOM: 100 };
+
 const WIDTH = 900 - MARGIN.LEFT - MARGIN.RIGHT;
 const HEIGHT = 620 - MARGIN.TOP - MARGIN.BOTTOM;
+const MOBILE_HEIGHT = 800;
 
+const isMobile = window.innerWidth < 1000 ? true : false;
 
+const svgWidth = isMobile? window.innerWidth - MARGIN.LEFT - MARGIN.RIGHT : WIDTH;
+const svgHeight = isMobile ? MOBILE_HEIGHT : HEIGHT;
+console.log(isMobile)
 
 // Flag for jumping between data on Y axis
 let flag = true;
@@ -99,8 +105,8 @@ function updatedPurchasePrice(vehicles) {
 const svg = d3
   .select("#chart-area")
   .append("svg")
-  .attr("width", WIDTH + MARGIN.LEFT + MARGIN.RIGHT)
-  .attr("height", HEIGHT + MARGIN.TOP + MARGIN.BOTTOM)
+  .attr("width", svgWidth)
+  .attr("height", svgHeight + MARGIN.TOP + MARGIN.BOTTOM)
   .append("g")
   .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
 
@@ -128,14 +134,14 @@ g.call(tip);
 // Define scales and axes (will set domains later)
 const x = d3.scaleLinear().range([0, WIDTH]);
 
-const y = d3.scaleLinear().range([HEIGHT, 0]);
+const y = d3.scaleLinear().range([isMobile ? MOBILE_HEIGHT : HEIGHT, 0]);
 
 const color = d3.scaleOrdinal(d3.schemeTableau10);
 
 const xAxisGroup = g
   .append("g")
   .attr("class", "x axis")
-  .attr("transform", `translate(-100, ${HEIGHT})`);
+  .attr("transform", `translate(-100, ${isMobile ? MOBILE_HEIGHT : HEIGHT})`);
 
 const yAxisGroup = g
   .append("g")
@@ -151,14 +157,14 @@ const radiusScale = d3
 svg
   .append("text")
   .attr("x", WIDTH / 2)
-  .attr("y", HEIGHT + 90)
+  .attr("y", isMobile ? MOBILE_HEIGHT + 90 : HEIGHT + 90)
   .attr("text-anchor", "middle")
   .text("Purchase Price (CAN $)");
 
 const yLabel = g
   .append("text")
   .attr("transform", "rotate(-90)")
-  .attr("x", -HEIGHT / 2)
+  .attr("x", isMobile ? -MOBILE_HEIGHT/2 : -HEIGHT / 2)
   .attr("y", -MARGIN.LEFT - 60)
   .attr("text-anchor", "middle");
 
