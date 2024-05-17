@@ -134,7 +134,7 @@ g.call(tip);
 // Define scales and axes (will set domains later)
 const x = d3.scaleLinear().range([0, WIDTH]);
 
-const y = d3.scaleLinear().range([isMobile ? MOBILE_HEIGHT : HEIGHT, 0]);
+const y = d3.scaleBand().range([isMobile ? MOBILE_HEIGHT : HEIGHT, 0]);
 
 const color = d3.scaleOrdinal(d3.schemeTableau10);
 
@@ -165,7 +165,7 @@ const yLabel = g
   .append("text")
   .attr("transform", "rotate(-90)")
   .attr("x", isMobile ? -MOBILE_HEIGHT/2 : -HEIGHT / 2)
-  .attr("y", -MARGIN.LEFT - 60)
+  .attr("y", -MARGIN.LEFT - 80)
   .attr("text-anchor", "middle");
 
 /**
@@ -433,15 +433,19 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
   const vehicleTypes = [...new Set(filteredData.map((d) => d.type))];
 
   // Domains
-  x.domain([30000, d3.max(filteredData, (d) => d.purchase_price + 10000)]);
-  y.domain([
-    d3.min(filteredData, (d) => {
-      return d[`year${time}`] - 1000
-    }),
-    d3.max(filteredData, (d) => {
-      return d[`year${time}`] + 3000;
-    }),
-  ]);
+  // x.domain([30000, d3.max(filteredData, (d) => d.purchase_price + 10000)]);
+  x.domain([30000, d3.max(filteredData, (d) => d.total_cost + 20000)]);
+  y.domain(filteredData.map((d) => d.model));
+
+  // y.domain([
+  //   // d3.min(filteredData, (d) => {
+  //   //   return d.model
+  //   // }),
+  //   // d3.max(filteredData, (d) => {
+  //   //   return d.model
+  //   // }),
+    
+  // ]);
 
   // Add axes from variable declared above. This way the chart does not continue to stack on
   // itself everytime update() is called.
@@ -477,15 +481,17 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
   circles
     .transition(t)
     .attr("fill", (d) => color(d.type))
-    .attr("cy", (d) => y(d[`year${time}`]))
+    // .attr("cy", (d) => y(d[`year${time}`]))
+    .attr("cy", (d) => y(d.model))
+
     .attr("cx", (d) => {
       if (d.type === "ev" || d.type === "phev") {
         if (federalRebateFlag) {
-          return x(d.purchase_price - (provincialRebate + federalRebate));
+          return x(d.total_cost - (provincialRebate + federalRebate));
         }
-        return x(d.purchase_price - provincialRebate);
+        return x(d.total_cost - provincialRebate);
       } else {
-        return x(d.purchase_price);
+        return x(d.total_cost);
       }
     })
     .attr("r", (d) => radiusScale(d.total_cost))
@@ -502,20 +508,20 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
     .attr("cx", (d) => {
       if (d.type === "ev" || d.type === "phev") {
         if (federalRebateFlag) {
-          return x(d.purchase_price - (provincialRebate + federalRebate));
+          return x(d.total_cost - (provincialRebate + federalRebate));
         }
-        return x(d.purchase_price - provincialRebate);
+        return x(d.total_cost - provincialRebate);
       } else {
-        return x(d.purchase_price);
+        return x(d.total_cost);
       }
     })
-    .attr("cy", (d) => y(d[`year${time}`]))
+    .attr("cy", (d) => y(d.model))
     .attr("r", (d) => radiusScale(d.total_cost))
     .on("mouseover", tip.show)
     .on("mouseout", tip.hide);
 
   const text = flag ? "Fuel / Electricity Cost (CAN $)" : "First Year Overall Cost";
-  yLabel.text(text);
+  // yLabel.text(text);
 
   $("#year")[0].innerHTML = String(time);
   $("#date-slider").slider("value", Number(time));
