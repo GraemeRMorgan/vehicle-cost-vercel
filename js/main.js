@@ -1,12 +1,15 @@
-const MARGIN = { LEFT: 100, RIGHT: 10, TOP: 10, BOTTOM: 100 };
+const MARGIN = { LEFT: 140, RIGHT: 0, TOP: 10, BOTTOM: 100 };
 
-const WIDTH = 900 - MARGIN.LEFT - MARGIN.RIGHT;
-const HEIGHT = 620 - MARGIN.TOP - MARGIN.BOTTOM;
+const WIDTH = 1200 - MARGIN.LEFT - MARGIN.RIGHT;
+const HEIGHT = 700 - MARGIN.TOP - MARGIN.BOTTOM;
 const MOBILE_HEIGHT = 800;
+const MOBILE_WIDTH = 900;
 
 const isMobile = window.innerWidth < 1000 ? true : false;
+const offset = 22;
+const offsetX = 4200;
 
-const svgWidth = isMobile? window.innerWidth - MARGIN.LEFT - MARGIN.RIGHT : WIDTH;
+const svgWidth = isMobile ? window.innerWidth : WIDTH;
 const svgHeight = isMobile ? MOBILE_HEIGHT : HEIGHT;
 console.log(isMobile)
 
@@ -118,21 +121,22 @@ const g = svg
 
 
 
-//Tooltip
+// //Tooltip
 const tip = d3
   .tip()
   .attr("class", "d3-tip")
   .html((d) => {
     let text = `Vehicle: ${d.model}<br />`;
     text += `Total Cost: $${d3.format(",.2f")(d.total_cost)}<br />`;
-
+    text += `Purchase Price: $${d3.format(",.2f")(d.purchase_price)}<br />`;
+    text += `Operating Cost: $${d3.format(",.2f")(d[`year${time}`])}<br />`;
     return text;
   });
 
 g.call(tip);
 
 // Define scales and axes (will set domains later)
-const x = d3.scaleLinear().range([0, WIDTH]);
+const x = d3.scaleLinear().range([0, isMobile ? MOBILE_WIDTH - 200 : WIDTH - 200]);
 
 const y = d3.scaleBand().range([isMobile ? MOBILE_HEIGHT : HEIGHT, 0]);
 
@@ -159,13 +163,13 @@ svg
   .attr("x", WIDTH / 2)
   .attr("y", isMobile ? MOBILE_HEIGHT + 90 : HEIGHT + 90)
   .attr("text-anchor", "middle")
-  .text("Purchase Price (CAN $)");
+  .text("Total Cost (CAN $)");
 
 const yLabel = g
   .append("text")
   .attr("transform", "rotate(-90)")
-  .attr("x", isMobile ? -MOBILE_HEIGHT/2 : -HEIGHT / 2)
-  .attr("y", -MARGIN.LEFT - 80)
+  .attr("x", isMobile ? -MOBILE_HEIGHT / 2 : -HEIGHT / 2)
+  .attr("y", -MARGIN.LEFT)
   .attr("text-anchor", "middle");
 
 /**
@@ -214,7 +218,7 @@ d3.json("data/vehicleCost.json").then((data) => {
 
   const legend = g
     .append("g")
-    .attr("transform", `translate(${WIDTH - 780}, ${HEIGHT - 480})`);
+    .attr("transform", `translate(${WIDTH - 1050}, ${HEIGHT - 480})`);
 
   vehicleTypes.forEach((vehicle, i) => {
     const legendeRow = legend
@@ -295,7 +299,7 @@ $("#mileage-slider").slider({
 
 // Gas Price
 $("#gas-slider").slider({
-  min: 1.0,
+  min: 0,
   max: 4.0,
   step: 0.1,
   value: 1.8,
@@ -308,7 +312,7 @@ $("#gas-slider").slider({
 
 // Electricity Slider
 $("#electricity-slider").slider({
-  min: 6,
+  min: 0,
   max: 50,
   step: 2,
   value: 12,
@@ -339,7 +343,7 @@ $("#federal-check").on("change", () => {
 
 // Insurance Cost
 $("#insurance-slider").slider({
-  min: 500,
+  min: 0,
   max: 3000,
   step: 100,
   value: 1800,
@@ -425,6 +429,10 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
     }
   });
 
+  // Order by category for the y-axis. It makes it more interesting to look at. 
+  filteredData.sort((a, b) => d3.ascending(a.cat, b.cat));
+
+
   // Update radius values
   const maxRadius = d3.max(filteredData, (d) => d.purchase_price);
   radiusScale.domain([30000, maxRadius]);
@@ -444,7 +452,7 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
   //   // d3.max(filteredData, (d) => {
   //   //   return d.model
   //   // }),
-    
+
   // ]);
 
   // Add axes from variable declared above. This way the chart does not continue to stack on
@@ -482,20 +490,34 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
     .transition(t)
     .attr("fill", (d) => color(d.type))
     // .attr("cy", (d) => y(d[`year${time}`]))
-    .attr("cy", (d) => y(d.model))
+    .attr("cy", (d) => y(d.model) + offset)
 
     .attr("cx", (d) => {
       if (d.type === "ev" || d.type === "phev") {
         if (federalRebateFlag) {
-          return x(d.total_cost - (provincialRebate + federalRebate));
+          return x(d.total_cost - (provincialRebate + federalRebate) + offsetX);
         }
-        return x(d.total_cost - provincialRebate);
+        return x(d.total_cost - provincialRebate + offsetX);
       } else {
-        return x(d.total_cost);
+        return x(d.total_cost + offsetX);
       }
     })
     .attr("r", (d) => radiusScale(d.total_cost))
     .attr("width", x.bandwidth);
+
+  //Tooltip
+  const tip = d3
+    .tip()
+    .attr("class", "d3-tip")
+    .html((d) => {
+      let text = `Vehicle: ${d.model}<br />`;
+      text += `Total Cost: $${d3.format(",.2f")(d.total_cost)}<br />`;
+      text += `Purchase Price: $${d3.format(",.2f")(d.purchase_price -(provincialRebate + federalRebate))}<br />`;
+      text += `Operating Cost: $${d3.format(",.2f")(d[`year${time}`])}<br />`;
+      return text;
+    });
+
+  g.call(tip);
   /**
    * ENTER
    * Create new elements as needed
@@ -508,17 +530,19 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
     .attr("cx", (d) => {
       if (d.type === "ev" || d.type === "phev") {
         if (federalRebateFlag) {
-          return x(d.total_cost - (provincialRebate + federalRebate));
+          return x(d.total_cost - (provincialRebate + federalRebate) + offsetX);
         }
-        return x(d.total_cost - provincialRebate);
+        return x(d.total_cost - provincialRebate + offsetX);
       } else {
-        return x(d.total_cost);
+        return x(d.total_cost + offsetX);
       }
     })
-    .attr("cy", (d) => y(d.model))
+    .attr("cy", (d) => y(d.model) + offset)
     .attr("r", (d) => radiusScale(d.total_cost))
     .on("mouseover", tip.show)
     .on("mouseout", tip.hide);
+
+
 
   const text = flag ? "Fuel / Electricity Cost (CAN $)" : "First Year Overall Cost";
   // yLabel.text(text);

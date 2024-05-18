@@ -32,8 +32,18 @@ h1 {
   display: flex;
   justify-content: space-evenly;
   padding: 24px 48px;
-  background-color: tomato;
+  /* background-color: tomato; */
   width: 100%;
+}
+
+.title{
+  background-color: hsla(211, 36%, 48%, 0.49);
+  padding: 24px 48px;
+  border-radius: 12px;
+
+}
+.titleText {
+  margin-bottom: -2px;
 }
 
 .buttonNav {
@@ -86,7 +96,7 @@ h1 {
 
 
 .col2 {
-  
+  flex:2;
 }
 
 @media(max-width: 1168px) {
