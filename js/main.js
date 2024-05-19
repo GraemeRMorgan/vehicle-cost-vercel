@@ -10,8 +10,8 @@ const isMobile = window.innerWidth < 1000 ? true : false;
 // const offsetX = 4200;
 // const offsetXEV = 4200;
 const offset = 22;
-const offsetX = 0;
-const offsetXEV = 0;
+const offsetX = 3000;
+const offsetXEV = 4000;
 
 
 const svgWidth = isMobile ? window.innerWidth : WIDTH;
