@@ -115,6 +115,7 @@ h1 {
   .col1 {
     font-size: 2rem;
     display: flex;
+    margin-left: 75px;
   }
   .col2{
     font-size: 24px;

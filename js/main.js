@@ -130,7 +130,7 @@ const tip = d3
     text += `Total Cost: $${d3.format(",.2f")(d.total_cost)}<br />`;
     text += `Purchase Price: $${d3.format(",.2f")(d.purchase_price)}<br />`;
     // text += `Operating Cost: $${d3.format(",.2f")(d[`year${time}`])}<br />`;
-    text += `Operating Cost: $${d3.format(",.2f")(d.total_cost - d.purchase_price - insurance - d.annual_maint)}<br />`;
+    text += `Operating Cost: $${d3.format(",.2f")(d.total_cost - (d.purchase_price) + provincialRebate)}<br />`;
 
     return text;
   });
@@ -418,10 +418,10 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
     if (d.type === "ev" || d.type === "phev") {
       console.log(vehicles)
 
-      d.total_cost = d.purchase_price + d[`year${time}`] - provincialRebate + insurance + (d.annual_maint * time);
+      d.total_cost = d.purchase_price + d[`year${time}`] - provincialRebate + (insurance*time) + (d.annual_maint * time);
 
     } else {
-      d.total_cost = d.purchase_price + d[`year${time}`] + insurance + (d.annual_maint * time);
+      d.total_cost = d.purchase_price + d[`year${time}`] + (insurance*time) + (d.annual_maint * time);
     }
   });
 
@@ -502,22 +502,22 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
 
 
 
+    console.log(insurance, time)
   //Tooltip
-  const tip = d3
-    .tip()
-    .attr("class", "d3-tip")
-    .html((d) => {
-      let text = `Vehicle: ${d.model}<br />`;
-      text += `Total Cost: $${d3.format(",.2f")(d.total_cost)}<br />`;
-      text += `Purchase Price: $${d3.format(",.2f")(d.purchase_price - (provincialRebate))}<br />`;
-      // text += `Operating Cost: $${d3.format(",.2f")(d[`year${time}`])}<br />`;
-      text += `Operating Cost: $${d3.format(",.2f")(d.total_cost + provincialRebate - d.purchase_price - insurance)}<br />`;
+//   const tip = d3
+//   .tip()
+//   .attr("class", "d3-tip")
+//   .html((d) => {
+//     let text = `Vehicle: ${d.model}<br />`;
+//     text += `Total Cost: $${d3.format(",.2f")(d.total_cost)}<br />`;
+//     text += `Purchase Price: $${d3.format(",.2f")(d.purchase_price)}<br />`;
+//     // text += `Operating Cost: $${d3.format(",.2f")(d[`year${time}`])}<br />`;
+//     text += `Operating Cost: $${d3.format(",.2f")(d.total_cost - (d.purchase_price + provincialRebate > 0 ? provincialRebate : 0)  )}<br />`;
 
+//     return text;
+//   });
 
-      return text;
-    });
-
-  g.call(tip);
+// g.call(tip);
   /**
    * ENTER
    * Create new elements as needed
