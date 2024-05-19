@@ -6,8 +6,13 @@ const MOBILE_HEIGHT = 800;
 const MOBILE_WIDTH = 900;
 
 const isMobile = window.innerWidth < 1000 ? true : false;
+// const offset = 22;
+// const offsetX = 4200;
+// const offsetXEV = 4200;
 const offset = 22;
-const offsetX = 4200;
+const offsetX = 0;
+const offsetXEV = 0;
+
 
 const svgWidth = isMobile ? window.innerWidth : WIDTH;
 const svgHeight = isMobile ? MOBILE_HEIGHT : HEIGHT;
@@ -29,9 +34,7 @@ let annualGas = gas * year;
 let electricity = 20;
 let annualElectricity = electricity * year;
 let provincialRebate = 0;
-let federalRebateFlag = false;
-const federalRebate = 5000;
-let totalRebate = provincialRebate + federalRebate;
+let totalRebate = provincialRebate;
 let insurance = 1800;
 let interval;
 let vehicles;
@@ -94,9 +97,6 @@ function calculateEVCost(distanceInKm, energyConsumptionPer100Km, costPerKwh) {
 function updatedPurchasePrice(vehicles) {
   vehicles.forEach((d) => {
     if (d.type === "ev" || d.type === "phev") {
-      if (federalRebateFlag) {
-        return x(d.purchase_price - (provincialRebate + federalRebate));
-      }
       return x(d.purchase_price - provincialRebate);
     } else {
       return x(d.purchase_price);
@@ -129,7 +129,9 @@ const tip = d3
     let text = `Vehicle: ${d.model}<br />`;
     text += `Total Cost: $${d3.format(",.2f")(d.total_cost)}<br />`;
     text += `Purchase Price: $${d3.format(",.2f")(d.purchase_price)}<br />`;
-    text += `Operating Cost: $${d3.format(",.2f")(d[`year${time}`])}<br />`;
+    // text += `Operating Cost: $${d3.format(",.2f")(d[`year${time}`])}<br />`;
+    text += `Operating Cost: $${d3.format(",.2f")(d.total_cost - d.purchase_price - insurance - d.annual_maint)}<br />`;
+
     return text;
   });
 
@@ -335,11 +337,6 @@ $("#rebate-slider").slider({
   },
 });
 
-// Federal Rebate
-$("#federal-check").on("change", () => {
-  federalRebateFlag = !federalRebateFlag;
-  update(vehicles, time, mileage, annualMileage);
-});
 
 // Insurance Cost
 $("#insurance-slider").slider({
@@ -406,24 +403,23 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
 
   // Recalculate total annual cost for each vehicle
   filteredData.forEach((d) => {
-    d.year1 = Number(d.annual_gas + d.annual_maint + insurance);
-    d.year2 = Number(d.year1 + d.annual_gas + d.annual_maint + insurance);
-    d.year3 = Number(d.year2 + d.annual_gas + d.annual_maint + insurance);
-    d.year4 = Number(d.year3 + d.annual_gas + d.annual_maint + insurance);
-    d.year5 = Number(d.year4 + d.annual_gas + d.annual_maint + insurance);
-    d.year6 = Number(d.year5 + d.annual_gas + d.annual_maint + insurance);
-    d.year7 = Number(d.year6 + d.annual_gas + d.annual_maint + insurance);
-    d.year8 = Number(d.year7 + d.annual_gas + d.annual_maint + insurance);
+    d.year1 = Number(d.annual_gas);
+    d.year2 = Number(d.year1 + d.annual_gas );
+    d.year3 = Number(d.year2 + d.annual_gas );
+    d.year4 = Number(d.year3 + d.annual_gas );
+    d.year5 = Number(d.year4 + d.annual_gas );
+    d.year6 = Number(d.year5 + d.annual_gas );
+    d.year7 = Number(d.year6 + d.annual_gas );
+    d.year8 = Number(d.year7 + d.annual_gas );
   });
 
   // Recalculate Total Vehicle Overhead
   filteredData.forEach((d) => {
     if (d.type === "ev" || d.type === "phev") {
-      if (federalRebateFlag) {
-        d.total_cost = d.purchase_price + d[`year${time}`] - (provincialRebate + federalRebate) + insurance + (d.annual_maint * time);
-      } else {
-        d.total_cost = d.purchase_price + d[`year${time}`] - provincialRebate + insurance + (d.annual_maint * time);
-      }
+      console.log(vehicles)
+
+      d.total_cost = d.purchase_price + d[`year${time}`] - provincialRebate + insurance + (d.annual_maint * time);
+
     } else {
       d.total_cost = d.purchase_price + d[`year${time}`] + insurance + (d.annual_maint * time);
     }
@@ -494,16 +490,17 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
 
     .attr("cx", (d) => {
       if (d.type === "ev" || d.type === "phev") {
-        if (federalRebateFlag) {
-          return x(d.total_cost - (provincialRebate + federalRebate) + offsetX);
-        }
-        return x(d.total_cost - provincialRebate + offsetX);
+
+        return x(d.total_cost - (provincialRebate / 8) + offsetXEV);
       } else {
         return x(d.total_cost + offsetX);
       }
     })
     .attr("r", (d) => radiusScale(d.total_cost))
     .attr("width", x.bandwidth);
+
+
+
 
   //Tooltip
   const tip = d3
@@ -512,8 +509,11 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
     .html((d) => {
       let text = `Vehicle: ${d.model}<br />`;
       text += `Total Cost: $${d3.format(",.2f")(d.total_cost)}<br />`;
-      text += `Purchase Price: $${d3.format(",.2f")(d.purchase_price -(provincialRebate + federalRebate))}<br />`;
-      text += `Operating Cost: $${d3.format(",.2f")(d[`year${time}`])}<br />`;
+      text += `Purchase Price: $${d3.format(",.2f")(d.purchase_price - (provincialRebate))}<br />`;
+      // text += `Operating Cost: $${d3.format(",.2f")(d[`year${time}`])}<br />`;
+      text += `Operating Cost: $${d3.format(",.2f")(d.total_cost + provincialRebate - d.purchase_price - insurance)}<br />`;
+
+
       return text;
     });
 
@@ -529,10 +529,8 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
     .attr("fill", (d) => color(d.type))
     .attr("cx", (d) => {
       if (d.type === "ev" || d.type === "phev") {
-        if (federalRebateFlag) {
-          return x(d.total_cost - (provincialRebate + federalRebate) + offsetX);
-        }
-        return x(d.total_cost - provincialRebate + offsetX);
+
+        return x(d.total_cost - (provincialRebate / 8) + offsetXEV);
       } else {
         return x(d.total_cost + offsetX);
       }
