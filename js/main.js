@@ -6,9 +6,6 @@ const MOBILE_HEIGHT = 800;
 const MOBILE_WIDTH = 900;
 
 const isMobile = window.innerWidth < 1000 ? true : false;
-// const offset = 22;
-// const offsetX = 4200;
-// const offsetXEV = 4200;
 const offset = 22;
 const offsetX = 3000;
 const offsetXEV = 4000;
@@ -371,9 +368,6 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
 
   // Update the annual mileage
   const mileageSelection = $("#mileage-slider").val();
-  // mileage = mileageSelection;
-  // const gasSelection = $("#gas-slider").val();
-  // gas = gasSelection;
 
   annualMileage = mileage * year;
 
@@ -437,19 +431,9 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
   const vehicleTypes = [...new Set(filteredData.map((d) => d.type))];
 
   // Domains
-  // x.domain([30000, d3.max(filteredData, (d) => d.purchase_price + 10000)]);
   x.domain([30000, d3.max(filteredData, (d) => d.total_cost + 20000)]);
   y.domain(filteredData.map((d) => d.model));
 
-  // y.domain([
-  //   // d3.min(filteredData, (d) => {
-  //   //   return d.model
-  //   // }),
-  //   // d3.max(filteredData, (d) => {
-  //   //   return d.model
-  //   // }),
-
-  // ]);
 
   // Add axes from variable declared above. This way the chart does not continue to stack on
   // itself everytime update() is called.
@@ -485,7 +469,6 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
   circles
     .transition(t)
     .attr("fill", (d) => color(d.type))
-    // .attr("cy", (d) => y(d[`year${time}`]))
     .attr("cy", (d) => y(d.model) + offset)
 
     .attr("cx", (d) => {
@@ -503,21 +486,7 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
 
 
     console.log(insurance, time)
-  //Tooltip
-//   const tip = d3
-//   .tip()
-//   .attr("class", "d3-tip")
-//   .html((d) => {
-//     let text = `Vehicle: ${d.model}<br />`;
-//     text += `Total Cost: $${d3.format(",.2f")(d.total_cost)}<br />`;
-//     text += `Purchase Price: $${d3.format(",.2f")(d.purchase_price)}<br />`;
-//     // text += `Operating Cost: $${d3.format(",.2f")(d[`year${time}`])}<br />`;
-//     text += `Operating Cost: $${d3.format(",.2f")(d.total_cost - (d.purchase_price + provincialRebate > 0 ? provincialRebate : 0)  )}<br />`;
 
-//     return text;
-//   });
-
-// g.call(tip);
   /**
    * ENTER
    * Create new elements as needed
@@ -543,7 +512,6 @@ function update(vehicles, time, mileage, annualMileage, annualGas) {
 
 
   const text = flag ? "Fuel / Electricity Cost (CAN $)" : "First Year Overall Cost";
-  // yLabel.text(text);
 
   $("#year")[0].innerHTML = String(time);
   $("#date-slider").slider("value", Number(time));
